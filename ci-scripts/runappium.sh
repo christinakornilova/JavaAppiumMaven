@@ -1,0 +1,1 @@
+/Applications/Appium.app/Contents/Resources/app/node_modules/appium/build/lib/main.js --address 0.0.0.0 --port 4723 --log-level debug &
