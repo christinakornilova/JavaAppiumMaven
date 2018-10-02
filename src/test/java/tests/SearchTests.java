@@ -105,39 +105,30 @@ public class SearchTests extends CoreTestCase {
 
     @Test
     public void testPositiveSearchArticleByTitleAndDescription() {
-        //ex9, ex12
-        String title = "Danny Worsnop";
-        String description = "The lead singer of Asking Alexandria and We Are Harlot.";
+        //ex9, ex12, ex19
+        String[] title, description;
+        if (Platform.getInstance().isAndroid() || Platform.getInstance().isIOS()) {
+            title = new String[] {"Danny Worsnop", "We Are Harlot", "Asking Alexandria"};
+            description = new String[] {"The lead singer of Asking Alexandria and We Are Harlot.", "American hard rock supergroup", "British metalcore band"};
+        } else {
+            title = new String[] {"Asking Alexandria", "Asking Alexandria (album)", "Into the Fire (Asking Alexandria song)"};
+            description = new String[] {"British metalcore band", "Asking Alexandria album", "Asking Alexandria song"};
+        }
+
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
-        searchPageObject.search(title);
+        searchPageObject.search(title[0]);
 
-        //check first result
-        assertTrue("Unable to locate search result article via title '" + title + "' and description '" + description + "'",
-                searchPageObject.isElementPresent(
-                        searchPageObject.waitForElementByTitleAndDescription(title, description),
-                        5
-                )
-        );
-
-        //check  second  result
-        title = "We Are Harlot";
-        description = "American hard rock supergroup";
-        assertTrue("Unable to locate search result article via title '" + title + "' and description '" + description + "'",
-                searchPageObject.isElementPresent(
-                        searchPageObject.waitForElementByTitleAndDescription(title, description),
-                        5
-                )
-        );
-
-        //check third result
-        title = "Asking Alexandria";
-        description = "British metalcore band";
-        assertTrue("Unable to locate search result article via title '" + title + "' and description '" + description + "'",
-                searchPageObject.isElementPresent(
-                        searchPageObject.waitForElementByTitleAndDescription(title, description),
-                        5
-                )
-        );
+        //check results
+        if (searchPageObject.getSearchResultsCount() > 0) {
+            for (int i = 0; i < title.length; i++) {
+                assertTrue("Unable to locate search result article via title '" + title[i] + "' and description '" + description[i] + "'",
+                        searchPageObject.isElementPresent(
+                                searchPageObject.waitForElementByTitleAndDescription(title[i], description[i]),
+                                5
+                        )
+                );
+            }
+        }
     }
 
 
