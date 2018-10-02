@@ -41,7 +41,7 @@ abstract public class ArticlePageObject extends MainPageObject{
 
     public String getArticleDesc(String desc) {
         WebElement articleDesc = waitForTitleElement(desc);
-        if (Platform.getInstance().isAndroid()) {
+        if (Platform.getInstance().isAndroid() || Platform.getInstance().isMW()) {
             return articleDesc.getAttribute("text");
         } else {
             return articleDesc.getAttribute("value");
