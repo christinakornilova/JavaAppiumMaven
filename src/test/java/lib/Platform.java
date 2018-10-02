@@ -1,21 +1,20 @@
 package lib;
 
-import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
-import io.appium.java_client.service.local.AppiumDriverLocalService;
-import io.appium.java_client.service.local.AppiumServiceBuilder;
-import org.openqa.selenium.net.UrlChecker;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
-import java.io.File;
 import java.net.URL;
-import java.time.Duration;
-import java.util.concurrent.TimeUnit;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Platform {
     private final static String PLATFORM_IOS = "ios";
     private final static String PLATFORM_ANDROID = "android";
+    private final static String PLATFORM_MOBILE_WEB = "mobileWeb";
     private final static String APPIUM_URL = "http://127.0.0.1:4723/wd/hub";
 //    private static final String APPIUM_URL = String.format("http://127.0.0.1:%d/wd/hub", 4723);
 
@@ -39,12 +38,18 @@ public class Platform {
         return isPlatform(PLATFORM_IOS);
     }
 
-    public AppiumDriver getDriver() throws Exception {
+    public boolean isMW() {
+        return isPlatform(PLATFORM_MOBILE_WEB);
+    }
+
+    public RemoteWebDriver getDriver() throws Exception {
         URL url = new URL(APPIUM_URL);
         if (isAndroid()) {
             return new AndroidDriver(url, this.getAndroidDesiredCapabilities());
         } else if (isIOS()) {
             return new IOSDriver(url, this.getIOSDesiredCapabilities());
+        } else if (isMW()) {
+            return new ChromeDriver(this.getMWChromeOptions());
         } else {
             throw new Exception("Unable to detect Driver type, Platform value " + this.getPlatformVar());
         }
@@ -71,7 +76,23 @@ public class Platform {
         return capabilities;
     }
 
-    private String getPlatformVar() {
+    private ChromeOptions getMWChromeOptions() {
+        Map<String, Object> deviceMetrics = new HashMap<>();
+        deviceMetrics.put("width", 360);
+        deviceMetrics.put("height", 640);
+        deviceMetrics.put("pixelRatio", 3.0);
+
+        Map<String, Object> mobileEmulation = new HashMap<>();
+        mobileEmulation.put("deviceMetrics", deviceMetrics);
+        mobileEmulation.put("userAgent", "Mozilla/5.0 (Linux; U; Android 4.4.2; en-us; SCH-I535 Build/KOT49H) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30");
+
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("window-size=360,640");
+
+        return chromeOptions;
+    }
+
+    public String getPlatformVar() {
         return System.getenv("PLATFORM");
     }
 

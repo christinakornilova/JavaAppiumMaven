@@ -1,7 +1,7 @@
 package lib.ui.android;
 
-import io.appium.java_client.AppiumDriver;
 import lib.ui.MyListsPageObject;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class AndroidMyListsPageObject extends MyListsPageObject {
     static {
@@ -10,7 +10,7 @@ public class AndroidMyListsPageObject extends MyListsPageObject {
         MY_READING_LIST_ITEMS = "id:org.wikipedia:id/page_list_item_container";
     }
 
-    public AndroidMyListsPageObject(AppiumDriver driver) {
+    public AndroidMyListsPageObject(RemoteWebDriver driver) {
         super(driver);
     }
 }

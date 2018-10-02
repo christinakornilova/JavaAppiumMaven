@@ -10,6 +10,7 @@ import lib.ui.factories.ArticlePageObjectFactory;
 import lib.ui.factories.MyListsPageObjectFactory;
 import lib.ui.factories.NavigationUIObjectFactory;
 import lib.ui.factories.SearchPageObjectFactory;
+import lib.ui.mobile_web.AuthorizationPageObject;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
 
@@ -17,6 +18,9 @@ import java.util.List;
 
 public class MyListsTests extends CoreTestCase {
     private final static String folderName = "Learning programming";
+    private final static String
+            login = "learnautoqa",
+            password = "pwd123@";
 
     private List<WebElement> getSearchResultsByKeyword(String keyword, SearchPageObject searchPageObject) {
         List<WebElement> listOfSearchResults = searchPageObject.search(keyword);
@@ -32,7 +36,7 @@ public class MyListsTests extends CoreTestCase {
 
         searchPageObject.initSearchElement();
         searchPageObject.typeSearchLine("Java");
-        searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+        searchPageObject.clickByArticleWithSubstring("bject-oriented programming language");
 
         ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         articlePageObject.waitForTitleElement();
@@ -44,9 +48,23 @@ public class MyListsTests extends CoreTestCase {
             articlePageObject.addArticleToMySaved();
         }
 
+        if (Platform.getInstance().isMW()) {
+            AuthorizationPageObject auth = new AuthorizationPageObject(driver);
+            auth.clickAuthButton();
+            auth.enterLoginData(login, password);
+            auth.submitForm();
+
+            articlePageObject.waitForTitleElement();
+
+            assertEquals("We are not on the same page after login", articleTitle, articlePageObject.getArticleTitle());
+
+            articlePageObject.addArticleToMySaved();
+        }
+
         articlePageObject.closeArticle();
 
         NavigationUI navigationUI = NavigationUIObjectFactory.get(driver);
+        navigationUI.openNavigation();
         navigationUI.clickMyLists();
 
         MyListsPageObject myListsPageObject = MyListsPageObjectFactory.get(driver);

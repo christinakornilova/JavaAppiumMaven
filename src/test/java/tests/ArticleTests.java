@@ -16,7 +16,7 @@ public class ArticleTests extends CoreTestCase {
 
         searchPageObject.initSearchElement();
         searchPageObject.typeSearchLine("Java");
-        searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+        searchPageObject.clickByArticleWithSubstring("bject-oriented programming language");
 
         ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         String articleTitle =  articlePageObject.getArticleTitle();
@@ -33,7 +33,7 @@ public class ArticleTests extends CoreTestCase {
 
         searchPageObject.initSearchElement();
         searchPageObject.typeSearchLine("Java");
-        searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+        searchPageObject.clickByArticleWithSubstring("bject-oriented programming language");
 
         ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         articlePageObject.waitForTitleElement();
@@ -48,10 +48,10 @@ public class ArticleTests extends CoreTestCase {
 
         if (Platform.getInstance().isAndroid()) {
             keyWord = "Three Days Grace";
-            substring = "Canadian band";
+            substring = "anadian band";
         } else {
             keyWord = "Java";
-            substring = "Object-oriented programming language";
+            substring = "bject-oriented programming language";
         }
 
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
